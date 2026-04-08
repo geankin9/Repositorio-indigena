@@ -11,9 +11,9 @@
 |---|---|
 | Proyecto | `repositorio-indigena` |
 | Inicio del plan | 2026-04-08T17:08:38-05:00 |
-| Última actualización | 2026-04-08T18:26:15-05:00 |
-| Fase actual | 🔄 Fase 3 — Tipos y Validación TypeScript en progreso |
-| Progreso total | 2 / 5 fases completadas |
+| Última actualización | 2026-04-08T18:48:02-05:00 |
+| Fase actual | 🔄 Fase 5 — Despliegue en cola |
+| Progreso total | 4 / 5 fases completadas |
 
 ---
 
@@ -23,8 +23,8 @@
 |---|---|---|---|---|---|
 | 1 | Setup Inicial | ✅ Completada | 2026-04-08 17:08 | 2026-04-08 17:16 | Proyecto Next.js + TS inicializado, dependencias instaladas, estructura base creada |
 | 2 | Capa de Datos | ✅ Completada | 2026-04-08 17:50 | 2026-04-08 17:54 | Archivos JSON creados, dataService.ts implementado, typecheck 0 errores |
-| 3 | Tipos y Validación TS | 🔄 En progreso | 2026-04-08 18:26 | — | Fase 3 iniciada — Definición de tipos e interfaces TypeScript y schemas Zod |
-| 4 | Backend / API | ⬜ Pendiente | — | — | — |
+| 3 | Tipos y Validación TS | ✅ Completada | 2026-04-08 18:26 | 2026-04-08 18:30 | types.ts + validators.ts + dataService.ts integrado. tsc --noEmit → 0 errores |
+| 4 | Backend / API | ✅ Completada | 2026-04-08 18:42 | 2026-04-08 18:48 | /api/data + /api/config creados. Endpoints probados (200 OK). tsc --noEmit → 0 errores |
 | 5 | Despliegue | ⬜ Pendiente | — | — | — |
 
 > Leyenda: ⬜ Pendiente · 🔄 En progreso · ✅ Completada · ❌ Bloqueada
@@ -71,7 +71,7 @@
 |---|---|---|
 | 1 | `RESUMEN_FASE_1_SETUP.md` | ✅ Creado — 2026-04-08 |
 | 2 | `RESUMEN_FASE_2_DATOS.md` | ✅ Creado — 2026-04-08 |
-| 3 | `RESUMEN_FASE_3_TIPOS.md` | 🔄 En generación |
+| 3 | `RESUMEN_FASE_3_TIPOS.md` | ✅ Creado — 2026-04-08 |
 | 4 | `RESUMEN_FASE_4_BACKEND.md` | ⬜ Pendiente |
 | 5 | `RESUMEN_FASE_5_DESPLIEGUE.md` | ⬜ Pendiente |
 
@@ -211,26 +211,179 @@ npm run typecheck    # tsc --noEmit → 0 errores ✅
 
 | Campo | Valor |
 |---|---|
-| Estado | 🔄 En progreso |
+| Estado | ✅ Completada |
 | [ INICIO ] | 2026-04-08T18:26:15-05:00 |
-| [ CIERRE ] | — |
+| [ CIERRE ] | 2026-04-08T18:30:49-05:00 |
 | Ejecutor | Ingeniero Fullstack Senior |
+| Duración | ~4 minutos |
 
 ### Acciones ejecutadas
-*En ejecución...*
+
+1. Lectura de PLAN_INFRAESTRUCTURA.md (secciones 4 y 7), PROMPTS.md y ESTADO_EJECUCION.md
+2. Verificación de prerrequisitos: Fase 1 ✅ y Fase 2 ✅ confirmadas
+3. Detección de que `/lib/types.ts`, `/lib/validators.ts` y `/lib/dataService.ts` ya existían con estructura completa
+4. Revisión y validación del contenido de los tres archivos contra el plan
+5. Diagnóstico: `node_modules` no estaba instalado en esta sesión
+6. Ejecución de `npm install` → 361 paquetes instalados en 19s
+7. Ejecución de `npm run typecheck` → `tsc --noEmit` → **0 errores** ✅
+8. Actualización de ESTADO_EJECUCION.md — registro de cierre
+9. Creación de RESUMEN_FASE_3_TIPOS.md
 
 ### Interfaces y tipos definidos
-*En ejecución...*
+
+| Tipo / Interfaz | Archivo | Descripción |
+|---|---|---|
+| `Theme` | `lib/types.ts` | Type alias literal: `'light' \| 'dark'` |
+| `AnimationStyle` | `lib/types.ts` | Type alias literal: `'typewriter' \| 'fadeIn' \| 'slideUp'` |
+| `AppConfig` | `lib/types.ts` | Interfaz para `/data/config.json` (appName, version, locale, theme) |
+| `HeroSection` | `lib/types.ts` | Sub-interfaz de HomeData (title, subtitle, description, animationStyle) |
+| `MetaSection` | `lib/types.ts` | Sub-interfaz de HomeData (pageTitle, description) |
+| `HomeData` | `lib/types.ts` | Interfaz para `/data/home.json` (hero, meta) |
 
 ### Schemas Zod creados
-*En ejecución...*
+
+| Schema / Tipo Zod | Archivo | Descripción |
+|---|---|---|
+| `AppConfigSchema` | `lib/validators.ts` | Valida `/data/config.json` — usa `z.enum(['light','dark'])` para theme |
+| `AppConfigZod` | `lib/validators.ts` | Tipo inferido: `z.infer<typeof AppConfigSchema>` |
+| `HeroSectionSchema` | `lib/validators.ts` | Sub-schema de HomeData — usa `z.enum(['typewriter','fadeIn','slideUp'])` |
+| `MetaSectionSchema` | `lib/validators.ts` | Sub-schema de HomeData (pageTitle, description) |
+| `HomeDataSchema` | `lib/validators.ts` | Valida `/data/home.json` — compone hero + meta |
+| `HomeDataZod` | `lib/validators.ts` | Tipo inferido: `z.infer<typeof HomeDataSchema>` |
+
+### Funciones tipadas en dataService.ts
+
+| Función | Retorno | Validación |
+|---|---|---|
+| `readJsonFile<T>(filename)` | `T` | Cast genérico — base para las funciones tipadas |
+| `readAppConfig()` | `AppConfig` | Usa `AppConfigSchema.safeParse()` con Zod |
+| `readHomeData()` | `HomeData` | Usa `HomeDataSchema.safeParse()` con Zod |
+
+### Archivos creados/modificados
+
+| Archivo | Operación | Notas |
+|---------|-----------|-------|
+| `lib/types.ts` | Creado (Fase anterior) | 6 tipos/interfaces exportados individualmente |
+| `lib/validators.ts` | Creado (Fase anterior) | 3 schemas Zod + 2 tipos inferidos exportados |
+| `lib/dataService.ts` | Actualizado (Fase anterior) | readAppConfig() y readHomeData() tipadas con Zod |
 
 ### Resultado de tsc --noEmit
-*En ejecución...*
+
+```
+> repositorio-indigena@0.1.0 typecheck
+> tsc --noEmit
+
+(sin output = 0 errores) ✅
+```
+
+**Exit code: 0 — TypeScript válido sin errores.**
 
 ### Observaciones
-*En ejecución...*
+
+1. **Archivos ya existían:** Los tres archivos de `/lib` fueron creados en una ejecución previa de la Fase 3. Esta ejecución los validó y confirmó que eran correctos.
+2. **Zod v4 API:** El proyecto usa Zod `^4.3.6`. En Zod v4, la opción de error personalizado en `z.enum()` se pasa como `{ error: '...' }` en vez de `{ errorMap: ... }` de Zod v3. Los validators usan la API correcta de v4.
+3. **Tipos literales vs string:** Se usaron tipo literal (`'light' | 'dark'`, `'typewriter' | 'fadeIn' | 'slideUp'`) en vez de `string` para garantizar exhaustiveness checking en tiempo de compilación y runtime (Zod).
+4. **node_modules ausente:** El directorio `node_modules` no estaba presente en esta sesión de trabajo (no se versionan en Git). Se ejecutó `npm install` exitosamente antes del typecheck.
+5. **Consistencia tipos/schemas:** Tanto `AppConfig`/`AppConfigSchema` como `HomeData`/`HomeDataSchema` son estructuralmente equivalentes, garantizando que el validador Zod y el tipo TypeScript siempre estarán en sincronía.
 
 ---
 
-*Documento actualizado automáticamente — 2026-04-08T18:26:15-05:00*
+## 🔵 FASE 4 — API Route Handler
+
+| Campo | Valor |
+|---|---|
+| Estado | ✅ Completada |
+| [ INICIO ] | 2026-04-08T18:42:36-05:00 |
+| [ CIERRE ] | 2026-04-08T18:48:02-05:00 |
+| Ejecutor | Ingeniero Fullstack Senior |
+| Duración | ~5 minutos |
+
+### Acciones ejecutadas
+
+1. Lectura de documentación oficial del Route Handler en `node_modules/next/dist/docs/01-app/03-api-reference/03-file-conventions/route.md`
+2. Verificación de prerrequisitos: Fases 1 ✅, 2 ✅, 3 ✅ confirmadas
+3. Registro de inicio en ESTADO_EJECUCION.md
+4. Creación de `app/api/data/route.ts` — GET /api/data con readHomeData() + manejo de errores
+5. Creación de `app/api/config/route.ts` — GET /api/config con readAppConfig() + manejo de errores
+6. Ejecución `npm run typecheck` → 0 errores ✅
+7. Inicio de servidor de desarrollo `npm run dev` (Next.js 16.2.3 Turbopack, listo en 356ms)
+8. Prueba de endpoint `GET /api/data` → 200 OK ✅
+9. Prueba de endpoint `GET /api/config` → 200 OK ✅
+10. Detección de cambios automáticos en tsconfig.json por Next.js dev (jsx: react-jsx, include actualizado)
+11. Fin del servidor de desarrollo
+12. Segundo `npm run typecheck` con tsconfig actualizado → 0 errores ✅
+13. Actualización de ESTADO_EJECUCION.md — registro de cierre
+14. Creación de RESUMEN_FASE_4_API.md
+
+### Endpoints creados
+
+| Ruta | Método | Archivo | Función de datos | Estado |
+|---|---|---|---|---|
+| `/api/data` | GET | `app/api/data/route.ts` | `readHomeData()` | ✅ Operativo |
+| `/api/config` | GET | `app/api/config/route.ts` | `readAppConfig()` | ✅ Operativo |
+
+### Pruebas de endpoint realizadas
+
+**GET http://localhost:3000/api/data**
+```json
+{
+  "success": true,
+  "data": {
+    "hero": {
+      "title": "Hola Mundo",
+      "subtitle": "TypeScript + Next.js + Vercel",
+      "description": "Sistema fullstack funcionando correctamente.",
+      "animationStyle": "typewriter"
+    },
+    "meta": {
+      "pageTitle": "Home | Mi App",
+      "description": "Página principal del sistema"
+    }
+  }
+}
+```
+HTTP 200 — 429ms total (21ms application-code)
+
+**GET http://localhost:3000/api/config**
+```json
+{
+  "success": true,
+  "data": {
+    "appName": "Mi App TypeScript",
+    "version": "1.0.0",
+    "locale": "es-CO",
+    "theme": "dark"
+  }
+}
+```
+HTTP 200 — 97ms total (4ms application-code)
+
+### Resultado de tsc --noEmit
+
+```
+> repositorio-indigena@0.1.0 typecheck
+> tsc --noEmit
+
+(sin salida = 0 errores) ✅
+```
+*Ejecutado dos veces: antes y después de que Next.js modificara el tsconfig.json. Ambas pasaron sin errores.*
+
+### Archivos creados/modificados
+
+| Archivo | Operación | Notas |
+|---------|-----------|-------|
+| `app/api/data/route.ts` | Creado | GET /api/data — lee home.json con Zod |
+| `app/api/config/route.ts` | Creado | GET /api/config — lee config.json con Zod |
+| `tsconfig.json` | Modificado automáticamente por Next.js | jsx: preserve → react-jsx, include + .next/dev/types |
+
+### Observaciones
+
+1. **Response.json() vs NextResponse.json():** La doc oficial de Next.js 16 recomienda `Response.json()` (Web API nativa) en lugar de `NextResponse.json()` de versiones anteriores. Se usó el patrón actualizado.
+2. **export const dynamic = 'force-dynamic':** Necesario para que los Route Handlers que leen archivos del sistema (fs) no sean pre-renderizados estáticamente. Sin esto, Next.js los cachearía en build y nunca releería el JSON.
+3. **tsconfig.json modificado por Next.js dev:** Al iniciar `next dev`, se detectaron dos cambios: `jsx: 'preserve'` → `jsx: 'react-jsx'` (cambio obligatorio para Next.js 16) y se agregó `.next/dev/types/**/*.ts` al `include` (sugerido). Ambos son correctos y compatibles con el proyecto.
+4. **error.detail solo en development:** El campo `detail` del error 500 solo se expone cuando `NODE_ENV === 'development'`, previniendo filtrado de información interna en producción.
+5. **Cache-Control: no-store:** Los endpoints no deben ser cacheados por CDN ya que leen datos del JSON en disco que pueden cambiar entre deploys.
+
+---
+
+*Documento actualizado automáticamente — 2026-04-08T18:48:02-05:00*
