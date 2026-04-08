@@ -11,9 +11,9 @@
 |---|---|
 | Proyecto | `repositorio-indigena` |
 | Inicio del plan | 2026-04-08T17:08:38-05:00 |
-| Última actualización | 2026-04-08T17:16:22-05:00 |
-| Fase actual | ✅ Fase 1 Completada — Lista para Fase 2 |
-| Progreso total | 1 / 5 fases completadas |
+| Última actualización | 2026-04-08T18:26:15-05:00 |
+| Fase actual | 🔄 Fase 3 — Tipos y Validación TypeScript en progreso |
+| Progreso total | 2 / 5 fases completadas |
 
 ---
 
@@ -22,8 +22,8 @@
 | Fase | Nombre | Estado | Inicio | Fin | Resumen |
 |---|---|---|---|---|---|
 | 1 | Setup Inicial | ✅ Completada | 2026-04-08 17:08 | 2026-04-08 17:16 | Proyecto Next.js + TS inicializado, dependencias instaladas, estructura base creada |
-| 2 | Capa de Datos | ⬜ Pendiente | — | — | — |
-| 3 | Frontend | ⬜ Pendiente | — | — | — |
+| 2 | Capa de Datos | ✅ Completada | 2026-04-08 17:50 | 2026-04-08 17:54 | Archivos JSON creados, dataService.ts implementado, typecheck 0 errores |
+| 3 | Tipos y Validación TS | 🔄 En progreso | 2026-04-08 18:26 | — | Fase 3 iniciada — Definición de tipos e interfaces TypeScript y schemas Zod |
 | 4 | Backend / API | ⬜ Pendiente | — | — | — |
 | 5 | Despliegue | ⬜ Pendiente | — | — | — |
 
@@ -70,8 +70,8 @@
 | Fase | Archivo de Resumen | Creado |
 |---|---|---|
 | 1 | `RESUMEN_FASE_1_SETUP.md` | ✅ Creado — 2026-04-08 |
-| 2 | `RESUMEN_FASE_2_DATOS.md` | ⬜ Pendiente |
-| 3 | `RESUMEN_FASE_3_FRONTEND.md` | ⬜ Pendiente |
+| 2 | `RESUMEN_FASE_2_DATOS.md` | ✅ Creado — 2026-04-08 |
+| 3 | `RESUMEN_FASE_3_TIPOS.md` | 🔄 En generación |
 | 4 | `RESUMEN_FASE_4_BACKEND.md` | ⬜ Pendiente |
 | 5 | `RESUMEN_FASE_5_DESPLIEGUE.md` | ⬜ Pendiente |
 
@@ -152,4 +152,85 @@ npm run typecheck                              # tsc --noEmit → 0 errores ✅
 
 ---
 
-*Documento actualizado automáticamente — 2026-04-08T17:16:22-05:00*
+## 🔵 FASE 2 — Capa de Datos JSON
+
+| Campo | Valor |
+|---|---|
+| Estado | ✅ Completada |
+| [ INICIO ] | 2026-04-08T17:50:42-05:00 |
+| [ CIERRE ] | 2026-04-08T17:54:00-05:00 |
+| Ejecutor | Ingeniero Fullstack Senior |
+| Duración | ~4 minutos |
+
+### Acciones ejecutadas
+
+1. Registro de inicio en ESTADO_EJECUCION.md
+2. Creación de `data/config.json` con estructura exacta del plan
+3. Creación de `data/home.json` con estructura exacta del plan
+4. Actualización de `data/README.md` — documentación de ambos archivos JSON, reglas de acceso e instrucciones para agregar nuevos archivos
+5. Creación de `lib/dataService.ts` con función genérica `readJsonFile<T>` usando `fs` y `path` de Node.js
+6. Creación de `lib/__test__/dataService.check.ts` — archivo temporal de validación de tipado estático
+7. Ejecución de `npm run typecheck` — ✅ 0 errores
+8. Eliminación del archivo temporal `lib/__test__/dataService.check.ts` y directorio `__test__`
+9. Registro de cierre en ESTADO_EJECUCION.md
+
+### Estructura JSON generada
+
+```
+data/
+├── config.json       ← AppConfig: appName, version, locale, theme
+├── home.json         ← HomeData: hero (title, subtitle, description, animationStyle), meta (pageTitle, description)
+└── README.md         ← Documentación actualizada de la capa de datos
+```
+
+### Archivos creados/modificados
+
+| Archivo | Operación | Notas |
+|---------|-----------|-------|
+| `data/config.json` | Creado | Configuración global — AppConfig |
+| `data/home.json` | Creado | Datos del Home — HomeData |
+| `data/README.md` | Actualizado | Documentación completa de los dos archivos |
+| `lib/dataService.ts` | Creado | Función genérica `readJsonFile<T>` |
+| `lib/__test__/dataService.check.ts` | Creado y eliminado | Solo para validación de tipos con tsc |
+
+### Comandos ejecutados
+
+```bash
+npm run typecheck    # tsc --noEmit → 0 errores ✅
+```
+
+### Observaciones
+
+1. **`readJsonFile<T>` es fully-typed:** La función lanza errores descriptivos con la ruta exacta del archivo buscado, lo que facilita depuración en producción.
+2. **Archivo de prueba temporal creado y eliminado:** Se verificó que el tipado estático funciona correctamente con las interfaces definidas temporalmente en el archivo de prueba. La validación pasó sin errores.
+3. **Sin tipos definidos aún en `/lib/types.ts`:** Las interfaces `AppConfig` y `HomeData` se definirán en la Fase 3. En esta fase solo se usaron interfaces locales en el archivo temporal para validar el tipado genérico.
+
+---
+
+## 🔵 FASE 3 — Tipos y Validación TypeScript
+
+| Campo | Valor |
+|---|---|
+| Estado | 🔄 En progreso |
+| [ INICIO ] | 2026-04-08T18:26:15-05:00 |
+| [ CIERRE ] | — |
+| Ejecutor | Ingeniero Fullstack Senior |
+
+### Acciones ejecutadas
+*En ejecución...*
+
+### Interfaces y tipos definidos
+*En ejecución...*
+
+### Schemas Zod creados
+*En ejecución...*
+
+### Resultado de tsc --noEmit
+*En ejecución...*
+
+### Observaciones
+*En ejecución...*
+
+---
+
+*Documento actualizado automáticamente — 2026-04-08T18:26:15-05:00*
