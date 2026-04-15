@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 import React from "react";
 
 interface AnimatedTextProps {
@@ -12,7 +12,7 @@ export const AnimatedText: React.FC<AnimatedTextProps> = ({ text, delay = 0 }) =
   // Dividimos el texto en palabras para animarlo y dejar los espacios limpios
   const words = text.split(" ");
   
-  const container = {
+  const container: Variants = {
     hidden: { opacity: 0 },
     visible: (i = 1) => ({
       opacity: 1,
@@ -20,7 +20,7 @@ export const AnimatedText: React.FC<AnimatedTextProps> = ({ text, delay = 0 }) =
     }),
   };
 
-  const child = {
+  const child: Variants = {
     visible: {
       opacity: 1,
       y: 0,
