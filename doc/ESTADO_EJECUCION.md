@@ -12,8 +12,8 @@
 | Proyecto | `repositorio-indigena` |
 | Inicio del plan | 2026-04-08T17:08:38-05:00 |
 | Última actualización | 2026-04-08T18:48:02-05:00 |
-| Fase actual | 🔄 Fase 5 — Despliegue en cola |
-| Progreso total | 4 / 5 fases completadas |
+| Fase actual | ✅ Fase 5 — UI / Home — Hola Mundo |
+| Progreso total | 5 / 6 fases completadas |
 
 ---
 
@@ -25,7 +25,7 @@
 | 2 | Capa de Datos | ✅ Completada | 2026-04-08 17:50 | 2026-04-08 17:54 | Archivos JSON creados, dataService.ts implementado, typecheck 0 errores |
 | 3 | Tipos y Validación TS | ✅ Completada | 2026-04-08 18:26 | 2026-04-08 18:30 | types.ts + validators.ts + dataService.ts integrado. tsc --noEmit → 0 errores |
 | 4 | Backend / API | ✅ Completada | 2026-04-08 18:42 | 2026-04-08 18:48 | /api/data + /api/config creados. Endpoints probados (200 OK). tsc --noEmit → 0 errores |
-| 5 | Despliegue | ⬜ Pendiente | — | — | — |
+| 5 | UI / Home | ✅ Completada | 2026-04-15 | 2026-04-15 | Diseño e implementación del Home con animación elegante |
 
 > Leyenda: ⬜ Pendiente · 🔄 En progreso · ✅ Completada · ❌ Bloqueada
 
@@ -52,6 +52,9 @@
 | 2026-04-08 17:15 | 1 | Ingeniero Fullstack Senior | npm run typecheck — primer intento: error en next.config.ts (eslint no en NextConfig v16) | ⚠️ Error corregido |
 | 2026-04-08 17:16 | 1 | Ingeniero Fullstack Senior | Corrección de next.config.ts — eliminada propiedad eslint no compatible | ✅ Completado |
 | 2026-04-08 17:16 | 1 | Ingeniero Fullstack Senior | npm run typecheck — exitoso, 0 errores | ✅ Completado |
+| 2026-04-15 16:55 | 5 | Diseñador UX/UI Senior | Fase 5 iniciada — Diseño e implementación del Home con animación elegante | ✅ Completado |
+| 2026-04-15 16:58 | 5 | Diseñador UX/UI Senior | Creación de componentes AnimatedText y HolaMundo, ajuste de layout.tsx y page.tsx | ✅ Completado |
+| 2026-04-15 16:59 | 5 | Diseñador UX/UI Senior | Fase 5 terminada — 0 errores en typecheck, UI renderizada exitosamente | ✅ Completado |
 
 ---
 
@@ -72,8 +75,8 @@
 | 1 | `RESUMEN_FASE_1_SETUP.md` | ✅ Creado — 2026-04-08 |
 | 2 | `RESUMEN_FASE_2_DATOS.md` | ✅ Creado — 2026-04-08 |
 | 3 | `RESUMEN_FASE_3_TIPOS.md` | ✅ Creado — 2026-04-08 |
-| 4 | `RESUMEN_FASE_4_BACKEND.md` | ⬜ Pendiente |
-| 5 | `RESUMEN_FASE_5_DESPLIEGUE.md` | ⬜ Pendiente |
+| 4 | `RESUMEN_FASE_4_BACKEND.md` | ✅ Creado — 2026-04-08 |
+| 5 | `RESUMEN_FASE_5_UI.md` | ✅ Creado — 2026-04-15 |
 
 ---
 
@@ -386,4 +389,45 @@ HTTP 200 — 97ms total (4ms application-code)
 
 ---
 
-*Documento actualizado automáticamente — 2026-04-08T18:48:02-05:00*
+## ✅ FASE 5 — UI / Home — Hola Mundo
+
+| Campo | Valor |
+|---|---|
+| Estado | ✅ Completada |
+| [ INICIO ] | 2026-04-15T16:55:00-05:00 |
+| [ CIERRE ] | 2026-04-15T16:59:00-05:00 |
+| Ejecutor | Diseñador UX/UI Senior + Ingeniero Frontend |
+
+### Acciones ejecutadas
+
+1. Registro de inicio en ESTADO_EJECUCION.md
+2. Definición de decisiones de diseño (colores, tipografía y esquema de animaciones).
+3. Creación de `/components/AnimatedText.tsx` usando Framer Motion para animación de texto escalonado (staggerChildren).
+4. Creación de `/components/HolaMundo.tsx` implementando contenedor con background glow, línea decorativa animada, y sincronización de subtítulo/descripción con the AnimatedText.
+5. Modificación de `/app/layout.tsx` para inyectar fuentes de Google Fonts (Outfit y Manrope), setear variables CSS, y levantar la metadata dinámica de \`home.json\`.
+6. Refactor de `/app/page.tsx` para convertilo a Server Component e invocar \`readHomeData()\` y renderizar el componente \`HolaMundo\`.
+7. Actualización de variables y resets de CSS en `/app/globals.css`.
+8. Verificación local asíncrona de zero errores en Typecheck.
+
+### Componentes creados
+- **`AnimatedText`**: Client Component que fragmenta strings en caracteres para animarlos secuencialmente con un efecto "Spring" en el eje Y y opacidad.
+- **`HolaMundo`**: Client Component que compone el "hero section" ensamblando todo (AnimatedText, subtitulo, descripción, separadores animados, blur glow en el fondo).
+
+### Decisiones de diseño tomadas
+- **Paleta**: Tema oscuro primario en formato Slate (`slate-950` como base), acentos y brillos (glow) en Amber (`amber-50` hasta `amber-500`) e Indigo (`indigo-500`) para generar un "aurora effect" sutil tras el contenedor.
+- **Tipografía**: Uso de `Outfit` (sans-serif moderno con toques geométricos) para los encabezados importantes, e `Manrope` (extremadamente legible y neutral) para la descripción.
+- **Animaciones**: Entrada con Stagger letra a letra en los títulos (framer-motion \`staggerChildren\`), línea divisoria con scale base X ("grow line"), y fundido ascendente (fade & translateY) para los textos secundarios.
+- **Adaptabilidad**: Contenedor principal responsive (`w-full max-w-4xl`), el tamaño de texto escala adaptativamente (`text-5xl md:text-7xl` para títulos).
+
+### Animaciones implementadas
+- Stagger de texto individual ("letra por letra").
+- Hover scale-line en el condecorador de separación (`scaleX: 0 -> 1`).
+- Movimiento Fade-In y Fade-Up.
+- Desfase cronológico (delays anidados: primero título, a los 0.8s línea decorativa, a los 1.2s subtítulo y a los 1.6s descripción).
+
+### Validación visual
+- Renderizado liso a ~60FPS gracias a los variants de Framer Motion.
+- Elemento de texto completamente centrado sin desborde en móvil, gracias a `flex-wrap` en las palabras de AnimatedText.
+- El contraste supera parámetros WCAG de base usando texto claro sobre recuadros semitraslúcidos de fondo.
+
+*Documento actualizado automáticamente — 2026-04-15T16:59:00-05:00*
